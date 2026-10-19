@@ -97,7 +97,196 @@ label{display:block;font-size:12px;color:var(--txt2);margin:0 0 5px}
 @media print{header,nav,.panel{box-shadow:none}
   body{background:#fff} .no-print{display:none} main{padding:8px}}
 @media (min-width:900px){main{max-width:1160px}}
+  /* ================= Apple HIG layer =================
+     Grounded in the bundled HIG mirror (foundations/color.md,
+     foundations/materials.md). iOS system colors by value; grouped
+     background with inset cards as the CONTENT layer (standard
+     material); Liquid Glass reserved for the FUNCTIONAL layer
+     (header + navigation), per "Don't use Liquid Glass in the
+     content layer" and "use Liquid Glass effects sparingly". */
+  :root{
+    /* iOS system colors — HIG, Color > Specifications */
+    --sys-blue:#0088FF; --sys-green:#34C759; --sys-orange:#FF8D28;
+    --sys-red:#FF383C; --sys-pink:#FF2D55; --sys-indigo:#6155F5;
+    --sys-teal:#00C3D0; --sys-yellow:#FFCC00;
+    --sys-gray:#8E8E93; --sys-gray2:#AEAEB2; --sys-gray3:#C7C7CC;
+    --sys-gray4:#D1D1D6; --sys-gray5:#E5E5EA; --sys-gray6:#F2F2F7;
+    /* semantic labels + separators */
+    --lbl:#000000; --lbl2:rgba(60,60,67,.60); --lbl3:rgba(60,60,67,.30);
+    --sep:rgba(60,60,67,.29); --fill:rgba(120,120,128,.10);
+    --grouped:#F2F2F7;
+    /* remap the app's tokens */
+    --bg:var(--grouped); --card:#ffffff; --card-solid:#ffffff;
+    --accent:var(--sys-green); --accent-soft:rgba(52,199,89,.16);
+    --txt:var(--lbl); --txt2:var(--lbl2); --line:var(--sep); --line-soft:rgba(60,60,67,.13);
+    --danger:var(--sys-red); --amber:var(--sys-orange); --info:var(--sys-blue); --ok:var(--sys-green);
+    --ok-soft:rgba(52,199,89,.16); --danger-soft:rgba(255,56,60,.14);
+    --amber-soft:rgba(255,141,40,.16); --info-soft:rgba(0,136,255,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.06);
+    --radius:16px;
+    --gl-blur:blur(22px) saturate(180%);
+    --gl-bg:rgba(255,255,255,.74); --gl-line:rgba(255,255,255,.85);
+  }
+  html,body{ background:var(--grouped) }
+  body{
+    font-family:"SF Arabic","SF Pro Text",-apple-system,BlinkMacSystemFont,"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+    color:var(--lbl); -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(circle at 6% -8%, rgba(52,199,89,.15), transparent 42%),
+      radial-gradient(circle at 97% 0%, rgba(0,136,255,.10), transparent 46%),
+      var(--grouped);
+    background-attachment:fixed;
+  }
+
+  /* ---- header: Liquid Glass, sticky, floats above content ---- */
+  header.app{
+    position:sticky; top:0; z-index:60;
+    background:var(--gl-bg);
+    -webkit-backdrop-filter:var(--gl-blur); backdrop-filter:var(--gl-blur);
+    border-bottom:1px solid var(--sep);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.65), 0 6px 22px rgba(0,0,0,.05);
+    padding:12px 16px 12px;
+  }
+  header.app .brand{ display:flex; align-items:center; gap:12px }
+  header.app .brand .logo{
+    width:44px; height:44px; border-radius:12px; object-fit:cover;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+  }
+  header.app .brand h1{ font-size:19px; font-weight:700; letter-spacing:-.3px; margin:0 }
+  header.app .brand small{ color:var(--lbl2); font-size:12.5px }
+  header.app .btn.sm{ min-height:38px }
+
+  /* ---- nav: iOS segmented control on glass ---- */
+  nav#nav{
+    display:flex; gap:4px; margin-top:12px; padding:4px;
+    background:var(--fill); border-radius:14px;
+    overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;
+  }
+  nav#nav::-webkit-scrollbar{ display:none }
+  nav#nav button{
+    flex:0 0 auto; border:0; cursor:pointer;
+    min-height:40px; padding:0 16px; border-radius:11px;
+    background:transparent; color:var(--lbl2);
+    font:inherit; font-size:14.5px; font-weight:600;
+    display:inline-flex; align-items:center; gap:6px;
+    transition:background .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+  nav#nav button:hover{ color:var(--lbl) }
+  nav#nav button.on{
+    background:rgba(255,255,255,.95); color:var(--lbl);
+    box-shadow:0 1px 3px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.95);
+  }
+
+  /* ---- content layer: inset cards ---- */
+  main{ padding:20px 16px 48px }
+  .panel{
+    background:var(--card); border:0; border-radius:20px;
+    padding:22px 22px 24px; margin-bottom:20px; box-shadow:var(--shadow);
+  }
+  .panel h2{ font-size:24px; font-weight:800; letter-spacing:-.6px; color:var(--lbl); margin:0 }
+  .panel h3{ font-size:15px; font-weight:700; color:var(--lbl2); margin:24px 0 10px }
+  .g4{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin-top:16px }
+  .tile{
+    background:var(--card); border:1px solid var(--line-soft);
+    border-radius:16px; padding:16px 16px 14px; box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .tile .k{ font-size:12.5px; font-weight:600; color:var(--lbl2); margin:0 0 6px }
+  .tile .v{ font-size:30px; font-weight:800; letter-spacing:-1px; color:var(--lbl) }
+  .tile .sub{ font-size:12px; color:var(--lbl3); margin-top:2px }
+  /* semantic meaning moves to the value, not the card background */
+  .tile.g .v, .tile.g .v *{ color:var(--sys-green) }
+  .tile.r .v, .tile.r .v *{ color:var(--sys-red) }
+  .tile.a .v, .tile.a .v *{ color:var(--sys-orange) }
+
+  /* ---- controls: Liquid Glass capsules, 44pt minimum target ---- */
+  .btn{
+    border:1px solid rgba(255,255,255,.5); border-radius:999px;
+    min-height:44px; padding:0 20px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    font:inherit; font-size:15px; font-weight:700; color:#fff;
+    background:linear-gradient(180deg,#3ddb6a,#2fb457);
+    box-shadow:0 2px 10px rgba(52,199,89,.30), inset 0 1px 0 rgba(255,255,255,.45);
+    transition:transform .16s ease, box-shadow .16s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(52,199,89,.34), inset 0 1px 0 rgba(255,255,255,.5) }
+  .btn:active{ transform:translateY(0) }
+  .btn.sec{
+    background:var(--gl-bg); color:var(--accent); border-color:var(--gl-line);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 2px 8px rgba(0,0,0,.08);
+  }
+  .btn.ghost{ background:transparent; color:var(--accent); border-color:var(--accent-soft); box-shadow:none }
+  .btn.danger{
+    background:linear-gradient(180deg,#ff5c5f,#e33338); border-color:rgba(255,255,255,.45);
+    box-shadow:0 2px 10px rgba(255,56,60,.30), inset 0 1px 0 rgba(255,255,255,.40);
+  }
+  .btn.sm{ min-height:38px; padding:0 15px; font-size:13.5px }
+  :focus-visible{ outline:none; box-shadow:0 0 0 3.5px var(--accent-soft) !important }
+
+  /* ---- inputs: iOS filled fields ---- */
+  input,select,textarea{
+    width:100%; border:1px solid transparent; border-radius:11px;
+    min-height:44px; padding:10px 14px; font:inherit; font-size:15.5px;
+    background:rgba(120,120,128,.10); color:var(--lbl);
+    -webkit-appearance:none; appearance:none;
+    transition:box-shadow .16s ease, background .16s ease, border-color .16s ease;
+  }
+  input:focus,select:focus,textarea:focus{
+    outline:none; background:rgba(120,120,128,.06);
+    border-color:var(--accent); box-shadow:0 0 0 3.5px var(--accent-soft);
+  }
+  label{ display:block; font-size:13px; font-weight:600; color:var(--lbl2); margin-bottom:5px }
+  fieldset{ border:0; padding:0; margin:0 }
+
+  /* ---- tables: iOS grouped list ---- */
+  .scroller{ border:1px solid var(--line-soft); border-radius:14px; overflow:auto; background:#fff }
+  table{ width:100%; border-collapse:collapse; font-size:14.5px }
+  th,td{ border:0; border-bottom:1px solid var(--sep); padding:12px 14px; text-align:right }
+  th{
+    font-size:12.5px; font-weight:700; color:var(--lbl2);
+    background:rgba(120,120,128,.06); position:sticky; top:0;
+  }
+  tr:last-child td{ border-bottom:0 }
+  tbody tr:hover{ background:rgba(120,120,128,.05) }
+
+  /* ---- badges, chips, segmented tabs ---- */
+  .tag{ border-radius:999px; padding:3px 10px; font-size:12px; font-weight:700; border:1px solid transparent; display:inline-block }
+  .tag.ok{ background:var(--ok-soft); color:#1a7f37 }
+  .tag.danger{ background:var(--danger-soft); color:#c62226 }
+  .tag.info{ background:var(--info-soft); color:#0060be }
+  .tag.risk{ background:var(--amber-soft); color:#a95a00 }
+  .chip{
+    border:0; border-radius:999px; padding:9px 15px; font:inherit;
+    font-size:13.5px; font-weight:600; cursor:pointer;
+    background:rgba(120,120,128,.10); color:var(--lbl2);
+  }
+  .chip.on{ background:rgba(255,255,255,.95); color:var(--lbl); box-shadow:0 1px 3px rgba(0,0,0,.14) }
+  .tabs{ display:inline-flex; gap:4px; padding:4px; background:rgba(120,120,128,.10); border-radius:12px; margin:6px 0 }
+  .tabs button{
+    border:0; background:transparent; border-radius:9px; min-height:38px; padding:0 14px;
+    font:inherit; font-size:13.5px; font-weight:600; color:var(--lbl2); cursor:pointer;
+  }
+  .tabs button.on{ background:#fff; color:var(--lbl); box-shadow:0 1px 3px rgba(0,0,0,.14) }
+
+  /* ---- banners: alert-style cards ---- */
+  .banner{
+    border-radius:14px; padding:14px 16px; font-size:14.5px;
+    background:var(--amber-soft); border:1px solid rgba(255,141,40,.30); color:#7a4400;
+  }
+  .banner.danger{ background:var(--danger-soft); border-color:rgba(255,56,60,.30); color:#a81e22 }
+  .banner strong{ font-weight:800 }
+  .empty{ color:var(--lbl3); font-size:14px; padding:22px; text-align:center }
+  .chart{ background:#fff; border-radius:14px; padding:12px }
+  .menu{ border-radius:14px; background:#fff; box-shadow:var(--shadow); border:0 }
+
+  @media(prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important } }
+  /* keep print/export flat and glass-free */
+  @media print{
+    header.app{ position:static; background:#fff;
+      -webkit-backdrop-filter:none; backdrop-filter:none; box-shadow:none }
+    .btn,.tile,.panel,.chip{ -webkit-backdrop-filter:none; backdrop-filter:none; box-shadow:none }
+  }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header class="app no-print">
